@@ -24,12 +24,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 from langchain_chroma import Chroma
 
 
-#Gemini API 키 설정
-try:
-    os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
-except Exception as e:
-    st.error("⚠️ GOOGLE_API_KEY를 Streamlit Secrets에 설정해주세요!")
-    st.stop()
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 #cache_resource로 한번 실행한 결과 캐싱해두기
 @st.cache_resource
@@ -187,3 +182,4 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
