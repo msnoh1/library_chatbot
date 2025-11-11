@@ -80,17 +80,17 @@ def initialize_components(selected_model):
     대답은 한국어로 하고, 존댓말을 써줘.\
 
     {context}"""
+
     qa_prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", qa_system_prompt),
-            MessagesPlaceholder("history"),
+            ("system", "Use the context to answer:\n{context}"),
             ("human", "{input}"),
         ]
     )
-
     llm = ChatOpenAI(model=selected_model)
+    
     history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
-    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+    question_answer_chain = StuffDocumentsChain(llm=llm, prompt=qa_prompt)
     rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
     return rag_chain
 
@@ -131,6 +131,7 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
 
 
 
