@@ -76,7 +76,7 @@ def get_vectorstore(_docs):
 # PDF 문서 로드-벡터 DB 저장-검색기-히스토리 모두 합친 Chain 구축
 @st.cache_resource
 def initialize_components(selected_model):
-    file_path = r"/mount/src/librarychatbot_gemini/[챗봇프로그램및실습] 부경대학교 규정집.pdf"
+    file_path = r"/mount/src/library_chatbot/[챗봇프로그램및실습] 부경대학교 규정집.pdf"
     pages = load_and_split_pdf(file_path)
     vectorstore = get_vectorstore(pages)
     retriever = vectorstore.as_retriever()
@@ -182,4 +182,5 @@ if prompt_message := st.chat_input("Your question"):
             with st.expander("참고 문서 확인"):
                 for doc in response['context']:
                     st.markdown(doc.metadata['source'], help=doc.page_content)
+
 
